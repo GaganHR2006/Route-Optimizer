@@ -26,5 +26,6 @@ void bellman_ford(Graph *g, int src);
 void floyd_warshall(Graph *g);
 void bfs(Graph *g, int src);
 void dfs(Graph *g, int src);
+void topological_sort(Graph *g);
 
 #endif

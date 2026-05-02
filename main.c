@@ -8,10 +8,12 @@
 
 void print_banner() {
     printf("\n");
-    printf("  +================================================+\n");
-    printf("  |   SMART LOGISTICS & ROUTE OPTIMIZER  v1.0     |\n");
-    printf("  |         DAA Mini Project | C Engine            |\n");
-    printf("  +================================================+\n");
+    printf("  +============================================================+\n");
+    printf("  |     SMART LOGISTICS & ROUTE OPTIMIZER  v1.0              |\n");
+    printf("  |     Design & Analysis of Algorithms -- Mini Project      |\n");
+    printf("  |     Dijkstra . BF . FW . Prim . Kruskal . Knapsack      |\n");
+    printf("  |     TSP B&B . TopoSort -- 11 algorithms, 4 paradigms    |\n");
+    printf("  +============================================================+\n");
 }
 
 void print_menu() {
@@ -70,6 +72,8 @@ int main() {
                 printf("  |  Kruskal's O(E log E)  -- better for sparse graphs  |\n");
                 printf("  |  Both produce same total MST cost (verified above)  |\n");
                 printf("  +======================================================+\n");
+                printf("\n  Running Topological Sort (prerequisite scheduling demo)...\n");
+                topological_sort(&g);
                 break;
             case 3: {
                 int cap;

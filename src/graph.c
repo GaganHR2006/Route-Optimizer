@@ -305,3 +305,77 @@ void dfs(Graph *g, int src) {
     printf("\n");
     timer_print(&t, "DFS");
 }
+
+/* -----------------------------------------
+   TOPOLOGICAL SORT  O(V + E)
+   Unit 2 -- Decrease and Conquer.
+   Only valid for Directed Acyclic Graphs (DAG).
+   Use case: course prerequisite scheduling.
+----------------------------------------- */
+
+static int  topo_stack[MAX_CITIES];
+static int  topo_top;
+static int  topo_visited[MAX_CITIES];
+
+static void topo_dfs(Graph *g, int u) {
+    topo_visited[u] = 1;
+    for (int v = 0; v < g->num_cities; v++) {
+        if (g->dist[u][v] != INF && g->dist[u][v] != 0
+            && !topo_visited[v])
+            topo_dfs(g, v);
+    }
+    topo_stack[topo_top++] = u; /* push after all descendants */
+}
+
+void topological_sort(Graph *g) {
+    Timer t;
+
+    /* Build a small DAG for course prerequisites */
+    Graph dag;
+    graph_init(&dag);
+    graph_add_city(&dag, "Algorithms");       /* 0 */
+    graph_add_city(&dag, "Data Structures");  /* 1 */
+    graph_add_city(&dag, "Graph Theory");     /* 2 */
+    graph_add_city(&dag, "Dynamic Prog.");    /* 3 */
+    graph_add_city(&dag, "NP-Completeness"); /* 4 */
+    graph_add_city(&dag, "Advanced DAA");    /* 5 */
+
+    /* directed edges: prerequisite -> course */
+    dag.dist[1][0] = 1;   /* Data Structures -> Algorithms   */
+    dag.dist[0][2] = 1;   /* Algorithms      -> Graph Theory */
+    dag.dist[0][3] = 1;   /* Algorithms      -> Dynamic Prog */
+    dag.dist[2][4] = 1;   /* Graph Theory    -> NP-Complete  */
+    dag.dist[3][4] = 1;   /* Dynamic Prog    -> NP-Complete  */
+    dag.dist[4][5] = 1;   /* NP-Complete     -> Advanced DAA */
+
+    int dn = dag.num_cities;
+
+    for (int i = 0; i < dn; i++) topo_visited[i] = 0;
+    topo_top = 0;
+
+    timer_start(&t);
+    for (int i = 0; i < dn; i++)
+        if (!topo_visited[i])
+            topo_dfs(&dag, i);
+    timer_stop(&t);
+
+    printf("\n  +--- TOPOLOGICAL SORT  O(V+E) ---+\n");
+    printf("  |  Technique   : Decrease-and-Conquer (DFS-based)\n");
+    printf("  |  Use case    : Course prerequisite scheduling\n");
+    printf("  |  Complexity  : O(V+E)  V=%d  E=6\n\n", dn);
+
+    printf("  Dependency graph:\n");
+    printf("  Data Structures -> Algorithms -> Graph Theory -+\n");
+    printf("                              +-> Dynamic Prog.  +--> NP-Complete -> Advanced DAA\n");
+    printf("                                                 +\n");
+
+    printf("\n  Valid course order (Topological sequence):\n  ");
+    for (int i = topo_top - 1; i >= 0; i--) {
+        printf("%s", dag.cities[topo_stack[i]].name);
+        if (i > 0) printf("  ->  ");
+    }
+    printf("\n");
+    timer_print(&t, "Topological Sort");
+
+    (void)g; /* g passed for API consistency — DAG built internally */
+}
