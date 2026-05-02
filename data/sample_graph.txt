@@ -1,0 +1,10 @@
+# Indian Logistics Network - Sample
+# Format: city1_index city2_index distance_km
+0 1 346
+0 2 575
+1 2 627
+2 3 711
+3 4 149
+4 5 1413
+2 5 1568
+0 3 984
