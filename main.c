@@ -43,9 +43,20 @@ int main() {
             case 1:
                 if (g.num_cities == 0) { printf("  [!] Load a network first (option 5).\n"); break; }
                 graph_print(&g);
-                printf("  Running Dijkstra...\n");        dijkstra(&g, 0);
-                printf("  Running Bellman-Ford...\n");    bellman_ford(&g, 0);
-                printf("  Running Floyd-Warshall...\n");  floyd_warshall(&g);
+                printf("\n  Running all 3 shortest-path algorithms from [0] %s...\n",
+                       g.cities[0].name);
+                dijkstra(&g, 0);
+                bellman_ford(&g, 0);
+                floyd_warshall(&g);
+                printf("\n  --- Traversals ---\n");
+                bfs(&g, 0);
+                dfs(&g, 0);
+                printf("\n  +==================================================+\n");
+                printf("  |  COMPLEXITY COMPARISON                          |\n");
+                printf("  |  Dijkstra       O(V^2)  -- single source        |\n");
+                printf("  |  Bellman-Ford   O(V*E)  -- handles neg weights  |\n");
+                printf("  |  Floyd-Warshall O(V^3)  -- all pairs            |\n");
+                printf("  +==================================================+\n");
                 break;
             case 2:
                 if (g.num_cities == 0) { printf("  [!] Load a network first (option 5).\n"); break; }
