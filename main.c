@@ -91,7 +91,12 @@ int main() {
             }
             case 4:
                 if (g.num_cities == 0) { printf("  [!] Load a network first (option 5).\n"); break; }
-                printf("  Running TSP Branch & Bound...\n");
+                if (g.num_cities > 12) {
+                    printf("  [!] Too many cities for TSP demo (max 12). Use option 5 sample.\n");
+                    break;
+                }
+                printf("\n  TSP -- finding shortest tour visiting ALL cities exactly once.\n");
+                printf("  This is NP-Hard. Brute force runs first as baseline.\n");
                 tsp_branch_and_bound(&g);
                 break;
             case 5:
