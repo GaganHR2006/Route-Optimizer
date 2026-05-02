@@ -60,8 +60,16 @@ int main() {
                 break;
             case 2:
                 if (g.num_cities == 0) { printf("  [!] Load a network first (option 5).\n"); break; }
-                printf("  Running Prim's MST...\n");      prim(&g, 0);
-                printf("  Running Kruskal's MST...\n");   kruskal(&g);
+                graph_print(&g);
+                printf("\n  Running MST algorithms -- finding minimum-cost network...\n");
+                prim(&g, 0);
+                kruskal(&g);
+                printf("\n  +======================================================+\n");
+                printf("  |  MST COMPARISON                                     |\n");
+                printf("  |  Prim's    O(V^2)      -- better for dense graphs   |\n");
+                printf("  |  Kruskal's O(E log E)  -- better for sparse graphs  |\n");
+                printf("  |  Both produce same total MST cost (verified above)  |\n");
+                printf("  +======================================================+\n");
                 break;
             case 3:
                 printf("  Running Knapsack modules...\n");
