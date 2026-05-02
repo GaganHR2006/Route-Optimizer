@@ -71,11 +71,24 @@ int main() {
                 printf("  |  Both produce same total MST cost (verified above)  |\n");
                 printf("  +======================================================+\n");
                 break;
-            case 3:
-                printf("  Running Knapsack modules...\n");
-                knapsack_01(NULL, 0, 0);
-                knapsack_fractional(NULL, 0, 0);
+            case 3: {
+                int cap;
+                printf("\n  Enter vehicle cargo capacity (recommended: 40): ");
+                scanf("%d", &cap);
+                if (cap <= 0 || cap > MAX_CAPACITY) {
+                    printf("  [!] Capacity must be 1-%d.\n", MAX_CAPACITY);
+                    break;
+                }
+                knapsack_compare(cap);
+                printf("\n  +============================================================+\n");
+                printf("  |  WHY GREEDY FAILS FOR 0/1 KNAPSACK                       |\n");
+                printf("  |  Greedy picks highest ratio items -- but can't split.    |\n");
+                printf("  |  It may leave capacity unused with no item to fill it.   |\n");
+                printf("  |  DP explores ALL combinations -> guaranteed optimal.     |\n");
+                printf("  |  Trade-off: DP is O(n*W), Greedy is O(n log n)          |\n");
+                printf("  +============================================================+\n");
                 break;
+            }
             case 4:
                 if (g.num_cities == 0) { printf("  [!] Load a network first (option 5).\n"); break; }
                 printf("  Running TSP Branch & Bound...\n");
