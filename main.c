@@ -5,6 +5,7 @@
 #include "knapsack.h"
 #include "tsp.h"
 #include "benchmark.h"
+#include "visualizer.h"
 
 void print_banner() {
     printf("\n");
@@ -24,6 +25,7 @@ void print_menu() {
     printf("  |  3. Cargo Optimizer (Knapsack DP/Greedy) |\n");
     printf("  |  4. Delivery Route  (TSP B&B)           |\n");
     printf("  |  5. Load Sample Network                 |\n");
+    printf("  |  6. Launch GUI Visualizer  (Raylib)     |\n");
     printf("  |  0. Exit                                |\n");
     printf("  +-----------------------------------------+\n");
     printf("  Choice: ");
@@ -107,6 +109,10 @@ int main() {
                 graph_load_sample(&g);
                 printf("  [OK] Sample Indian logistics network loaded.\n");
                 graph_print(&g);
+                break;
+            case 6:
+                printf("  Opening visualizer window...\n");
+                run_visualizer();
                 break;
             case 0:
                 printf("\n  Exiting. Goodbye.\n\n");
