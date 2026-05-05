@@ -1,6 +1,6 @@
-CC     = C:/msys64/ucrt64/bin/gcc.exe
-RAYINC = C:/Users/gagan/raylib/raylib-5.0_win32_mingw-w64/include
-RAYLIB = C:/Users/gagan/raylib/raylib-5.0_win32_mingw-w64/lib
+CC     = C:/TDM-GCC-64/bin/gcc.exe
+RAYINC = C:/raylib_src/src
+RAYLIB = C:/raylib_src/src
 
 CFLAGS  = -Wall -Wextra -O2 -Iinclude -I$(RAYINC)
 LDFLAGS = -L$(RAYLIB) -lraylib -lopengl32 -lgdi32 -lwinmm

@@ -567,7 +567,7 @@ static void draw_menu(void) {
     for(int i=0;i<4;i++){
         Rectangle r={(float)(WIN_W/2-290),(float)(210+i*95),580,64};
         DrawRectangleRounded(r,0.15f,8,C_PANEL);
-        DrawRectangleRoundedLines(r,0.15f,8,1.5f,cols[i]);   /* FIXED — thickness param restored */
+        DrawRectangleRoundedLines(r,0.15f,8,cols[i]);   /* FIXED — thickness param restored */
         DrawText(labels[i],WIN_W/2-262,228+i*95,19,cols[i]);
     }
     DrawText("Press number key to enter a module   |   ESC to quit",
