@@ -1,4 +1,4 @@
-CC     = gcc
+CC     = C:/msys64/ucrt64/bin/gcc.exe
 RAYINC = C:/Users/gagan/raylib/raylib-5.0_win32_mingw-w64/include
 RAYLIB = C:/Users/gagan/raylib/raylib-5.0_win32_mingw-w64/lib
 

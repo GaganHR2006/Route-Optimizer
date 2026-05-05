@@ -8,7 +8,7 @@
 /* ── layout ─────────────────────────────────────────── */
 #define WIN_W   1200
 #define WIN_H    700
-#define DIV      700      /* graph canvas / info panel split */
+#define DIV      700
 #define NODE_R    22
 
 /* ── theme ───────────────────────────────────────────── */
@@ -27,7 +27,7 @@
 #define C_ORANGE  (Color){255, 165, 0,   255}
 #define C_CYAN    (Color){0,   190, 255, 255}
 
-/* ── city screen positions (geographic layout) ────────── */
+/* ── city screen positions ────────── */
 static const Vector2 POS[6] = {
     {335, 520},   /* 0 Bangalore */
     {515, 498},   /* 1 Chennai   */
@@ -37,10 +37,8 @@ static const Vector2 POS[6] = {
     {362, 118},   /* 5 Delhi     */
 };
 
-/* ── shared graph ────────────────────────────────────── */
 static Graph g;
 
-/* ── view state machine ───────────────────────────────── */
 typedef enum { V_MENU, V_DIJKSTRA, V_MST, V_TSP, V_KNAPSACK } View;
 static View view = V_MENU;
 
@@ -107,7 +105,7 @@ static void precompute_kruskal(void) {
             if (g.dist[u][v]!=INF)
                 edges[em++]=(RE){u,v,g.dist[u][v]};
 
-    for (int i=1;i<em;i++) {        /* insertion sort */
+    for (int i=1;i<em;i++) {
         RE key=edges[i]; int j=i-1;
         while(j>=0&&edges[j].w>key.w){edges[j+1]=edges[j];j--;}
         edges[j+1]=key;
@@ -124,7 +122,7 @@ static void precompute_kruskal(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   TSP  brute-force + B&B  (self-contained)
+   TSP
 ══════════════════════════════════════════════════════ */
 static int tpath[6], tvis[6], tbest, tbest_p[6], tnodes;
 
@@ -177,7 +175,7 @@ static void bb_run(int dep, int cur, int cost, int n) {
 
 static int bf_tour[6], bf_cost, bf_nn;
 static int bb_tour[6], bb_cost, bb_nn;
-static int tsp_show; /* 0=BF  1=B&B */
+static int tsp_show;
 
 static void precompute_tsp(void) {
     int n=g.num_cities;
@@ -194,21 +192,20 @@ static void precompute_tsp(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   KNAPSACK  DP + Greedy  (self-contained)
+   KNAPSACK
 ══════════════════════════════════════════════════════ */
 #define KCAP 40
 static CargoItem  items[MAX_ITEMS];
 static int        nitems;
 static int        dp_sel[MAX_ITEMS], dp_tv, dp_tw;
-static double     gr_frac_orig[MAX_ITEMS]; /* indexed to items[] order */
+static double     gr_frac_orig[MAX_ITEMS];
 static double     gr_tv; static int gr_tw;
-static int        kmode; /* 0=DP  1=Greedy */
+static int        kmode;
 
 static void precompute_knapsack(void) {
     knapsack_load_sample(items, &nitems);
     int n=nitems, W=KCAP;
 
-    /* 0/1 DP */
     static int dp[MAX_ITEMS+1][MAX_CAPACITY+1];
     for(int i=0;i<=n;i++)
         for(int w=0;w<=W;w++) {
@@ -227,7 +224,6 @@ static void precompute_knapsack(void) {
     dp_tv=dp[n][W]; dp_tw=0;
     for(int i=0;i<n;i++) if(dp_sel[i]) dp_tw+=items[i].weight;
 
-    /* Greedy fractional — sort by ratio */
     CargoItem gr_sorted[MAX_ITEMS];
     double    gr_frac[MAX_ITEMS];
     memcpy(gr_sorted,items,n*sizeof(CargoItem));
@@ -250,7 +246,6 @@ static void precompute_knapsack(void) {
             gr_tw+=rem; rem=0;
         }
     }
-    /* map greedy fractions back to original items[] order */
     memset(gr_frac_orig,0,sizeof(gr_frac_orig));
     for(int j=0;j<n;j++)
         if(gr_frac[j]>0)
@@ -261,7 +256,7 @@ static void precompute_knapsack(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   DRAWING  HELPERS
+   DRAWING HELPERS
 ══════════════════════════════════════════════════════ */
 static void draw_edge_styled(int u, int v, Color col, float thick) {
     DrawLineEx(POS[u], POS[v], thick, col);
@@ -299,14 +294,14 @@ static void draw_ctrl_bar(const char *txt) {
 }
 
 /* ══════════════════════════════════════════════════════
-   DIJKSTRA  VIEW
+   DIJKSTRA VIEW
 ══════════════════════════════════════════════════════ */
 static void draw_dijkstra(void) {
     DS *s = &dsteps[dcur];
     int n = g.num_cities;
 
     draw_all_edges();
-    for(int v=0;v<n;v++)           /* highlight path edges */
+    for(int v=0;v<n;v++)
         if(s->par[v]!=-1)
             draw_edge_styled(s->par[v],v,C_PATH,3.5f);
 
@@ -328,21 +323,19 @@ static void draw_dijkstra(void) {
     DrawText(TextFormat("Step   : %d / %d",dcur+1,dcount),px,py,15,WHITE); py+=24;
     DrawLine(px,py,WIN_W-22,py,C_EDGE); py+=10;
 
-    DrawText("City",        px,    py,14,(Color){180,180,200,255});
-    DrawText("Dist(km)",    px+170,py,14,(Color){180,180,200,255}); py+=20;
+    DrawText("City",     px,    py,14,(Color){180,180,200,255});
+    DrawText("Dist(km)", px+170,py,14,(Color){180,180,200,255}); py+=20;
 
     for(int i=0;i<n;i++){
         if(i==0) continue;
         Color tc = s->dist[i]==INF ? C_DIM :
                    s->vis[i]        ? C_VISIT : WHITE;
-        DrawText(g.cities[i].name,
-                 s->dist[i]==INF ? px : px, py, 15, tc);
+        DrawText(g.cities[i].name, px, py, 15, tc);
         DrawText(s->dist[i]==INF ? "INF" : TextFormat("%d",s->dist[i]),
                  px+170, py, 15, tc);
         py+=20;
     }
 
-    /* legend */
     py=WIN_H-108;
     DrawText("Legend:", px,py,13,C_DIM); py+=16;
     DrawCircle(px+8,py+7,8,C_CURR);  DrawText("Current node",px+22,py,13,WHITE); py+=20;
@@ -353,7 +346,7 @@ static void draw_dijkstra(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   MST (KRUSKAL)  VIEW
+   MST VIEW
 ══════════════════════════════════════════════════════ */
 static void draw_mst(void) {
     int n=g.num_cities;
@@ -408,7 +401,7 @@ static void draw_mst(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   TSP  VIEW
+   TSP VIEW
 ══════════════════════════════════════════════════════ */
 static void draw_tsp(void) {
     int   n    = g.num_cities;
@@ -425,19 +418,19 @@ static void draw_tsp(void) {
     draw_info_panel();
     int px=DIV+22, py=22;
     DrawText("TRAVELLING SALESMAN",px,py,19,C_ORANGE); py+=28;
-    DrawText("NP-Hard — no poly-time solution",px,py,13,C_DIM); py+=22;
+    DrawText("NP-Hard -- no poly-time solution",px,py,13,C_DIM); py+=22;
     DrawLine(px,py,WIN_W-22,py,C_EDGE); py+=12;
 
     Color bfc = tsp_show==0?WHITE:C_DIM;
     Color bbc = tsp_show==1?WHITE:C_DIM;
 
     DrawText("BRUTE FORCE",px,py,16,tsp_show==0?C_BF:C_DIM); py+=20;
-    DrawText(TextFormat("  Cost   : %d km",bf_cost),  px,py,14,bfc); py+=18;
+    DrawText(TextFormat("  Cost   : %d km",bf_cost),    px,py,14,bfc); py+=18;
     DrawText(TextFormat("  Nodes  : %d explored",bf_nn),px,py,14,bfc); py+=18;
-    DrawText(TextFormat("  O(n!)  : %d! perms",n),     px,py,14,bfc); py+=26;
+    DrawText(TextFormat("  O(n!)  : %d! perms",n),      px,py,14,bfc); py+=26;
 
     DrawText("BRANCH & BOUND",px,py,16,tsp_show==1?C_BB:C_DIM); py+=20;
-    DrawText(TextFormat("  Cost   : %d km",bb_cost),  px,py,14,bbc); py+=18;
+    DrawText(TextFormat("  Cost   : %d km",bb_cost),    px,py,14,bbc); py+=18;
     DrawText(TextFormat("  Nodes  : %d explored",bb_nn),px,py,14,bbc); py+=18;
     int pct = bf_nn>0 ? (100*(bf_nn-bb_nn)/bf_nn) : 0;
     DrawText(TextFormat("  Pruned : %d%% of BF work",pct),px,py,14,bbc); py+=26;
@@ -451,7 +444,6 @@ static void draw_tsp(void) {
              px,py,14,tcol); py+=20;
     DrawText(TextFormat("Nodes visited: %d",nn),px,py,14,tcol);
 
-    /* tour path text */
     int ty=WIN_H-80;
     DrawText("Tour:",px,ty,14,C_DIM); ty+=16;
     int tx=px;
@@ -466,14 +458,13 @@ static void draw_tsp(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   KNAPSACK  VIEW
+   KNAPSACK VIEW
 ══════════════════════════════════════════════════════ */
 static void draw_knapsack(void) {
     int n=nitems;
     int bx=20, bar_max_h=220, bar_base=600;
     int bar_w=(DIV-bx*2)/n - 4;
 
-    /* title */
     DrawText(kmode==0 ? "0/1 KNAPSACK  (DP) - OPTIMAL"
                       : "FRACTIONAL KNAPSACK  (Greedy)",
              bx,18,20,kmode==0?C_CYAN:C_ORANGE);
@@ -481,7 +472,6 @@ static void draw_knapsack(void) {
                       : "Items can be split into fractions",
              bx,44,13,C_DIM);
 
-    /* capacity bar */
     int used = kmode==0 ? dp_tw : gr_tw;
     DrawRectangle(bx,66,DIV-bx*2,20,(Color){35,35,55,255});
     float frac=(float)used/KCAP; if(frac>1.0f)frac=1.0f;
@@ -504,26 +494,25 @@ static void draw_knapsack(void) {
             bc=dp_sel[i]?C_CYAN:(Color){55,55,75,255};
         } else {
             double fr=gr_frac_orig[i];
-            if(fr>=1.0)       bc=C_ORANGE;
-            else if(fr>0.0)   bc=(Color){255,100,50,255};
-            else              bc=(Color){55,55,75,255};
+            if(fr>=1.0)     bc=C_ORANGE;
+            else if(fr>0.0) bc=(Color){255,100,50,255};
+            else            bc=(Color){55,55,75,255};
         }
         DrawRectangle(bxi,bar_base-bhi,bar_w,bhi,bc);
         DrawRectangleLines(bxi,bar_base-bhi,bar_w,bhi,WHITE);
-        DrawText(TextFormat("v%d",items[i].value),bxi+2,bar_base-bhi-14,10,WHITE);
+        DrawText(TextFormat("v%d",items[i].value), bxi+2,bar_base-bhi-14,10,WHITE);
         DrawText(TextFormat("w%d",items[i].weight),bxi+2,bar_base+5,10,C_DIM);
     }
 
-    /* info panel */
     draw_info_panel();
     int px=DIV+22, py=22;
     DrawText("KNAPSACK",px,py,24,C_ORANGE); py+=32;
     DrawText(TextFormat("Capacity: %d units",KCAP),px,py,15,WHITE); py+=22;
     DrawLine(px,py,WIN_W-22,py,C_EDGE); py+=10;
 
-    DrawText("Item",   px,    py,13,(Color){180,180,200,255});
-    DrawText("W",      px+178,py,13,(Color){180,180,200,255});
-    DrawText("V",      px+208,py,13,(Color){180,180,200,255}); py+=18;
+    DrawText("Item", px,    py,13,(Color){180,180,200,255});
+    DrawText("W",    px+178,py,13,(Color){180,180,200,255});
+    DrawText("V",    px+208,py,13,(Color){180,180,200,255}); py+=18;
 
     for(int i=0;i<n;i++){
         Color tc;
@@ -536,10 +525,10 @@ static void draw_knapsack(void) {
             else if(fr>0.0) {tc=(Color){255,120,60,255}; tag="[part]";}
             else            {tc=C_DIM;}
         }
-        DrawText(items[i].name,            px,    py,13,tc);
-        DrawText(TextFormat("%d",items[i].weight),px+178,py,13,tc);
-        DrawText(TextFormat("%d",items[i].value), px+208,py,13,tc);
-        DrawText(tag,                      px+235,py,12,tc);
+        DrawText(items[i].name,                   px,    py,13,tc);
+        DrawText(TextFormat("%d",items[i].weight), px+178,py,13,tc);
+        DrawText(TextFormat("%d",items[i].value),  px+208,py,13,tc);
+        DrawText(tag,                              px+235,py,12,tc);
         py+=18;
     }
 
@@ -558,7 +547,7 @@ static void draw_knapsack(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   MENU  VIEW
+   MENU VIEW  —  FIX: DrawRectangleRoundedLines (4 params, no thickness)
 ══════════════════════════════════════════════════════ */
 static void draw_menu(void) {
     DrawText("SMART LOGISTICS VISUALIZER",
@@ -578,7 +567,7 @@ static void draw_menu(void) {
     for(int i=0;i<4;i++){
         Rectangle r={(float)(WIN_W/2-290),(float)(210+i*95),580,64};
         DrawRectangleRounded(r,0.15f,8,C_PANEL);
-        DrawRectangleRoundedLinesEx(r,0.15f,8,1.5f,cols[i]);
+        DrawRectangleRoundedLines(r,0.15f,8,1.5f,cols[i]);   /* FIXED — thickness param restored */
         DrawText(labels[i],WIN_W/2-262,228+i*95,19,cols[i]);
     }
     DrawText("Press number key to enter a module   |   ESC to quit",
@@ -586,7 +575,7 @@ static void draw_menu(void) {
 }
 
 /* ══════════════════════════════════════════════════════
-   PUBLIC  ENTRY  POINT
+   PUBLIC ENTRY POINT
 ══════════════════════════════════════════════════════ */
 void run_visualizer(void) {
     graph_load_sample(&g);
@@ -601,7 +590,6 @@ void run_visualizer(void) {
     view = V_MENU;
 
     while (!WindowShouldClose()) {
-        /* ── input ── */
         if (IsKeyPressed(KEY_ESCAPE)) {
             if (view != V_MENU) view = V_MENU;
             else break;
@@ -622,16 +610,15 @@ void run_visualizer(void) {
                 if(IsKeyPressed(KEY_R)) kcur=0;
                 break;
             case V_TSP:
-                if(IsKeyPressed(KEY_ONE))  tsp_show=0;
-                if(IsKeyPressed(KEY_TWO))  tsp_show=1;
+                if(IsKeyPressed(KEY_ONE)) tsp_show=0;
+                if(IsKeyPressed(KEY_TWO)) tsp_show=1;
                 break;
             case V_KNAPSACK:
-                if(IsKeyPressed(KEY_ONE))  kmode=0;
-                if(IsKeyPressed(KEY_TWO))  kmode=1;
+                if(IsKeyPressed(KEY_ONE)) kmode=0;
+                if(IsKeyPressed(KEY_TWO)) kmode=1;
                 break;
         }
 
-        /* ── draw ── */
         BeginDrawing();
         ClearBackground(C_BG);
         switch (view) {
