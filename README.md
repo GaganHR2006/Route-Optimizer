@@ -1,120 +1,240 @@
-# Smart Logistics & Route Optimizer
+# Smart Logistics & Route Optimizer v2.0
 ### Design and Analysis of Algorithms — Mini Project (C)
 
-A command-line engine that solves real-world logistics problems using
-11 algorithms across 4 paradigms, with live benchmarking that proves
-theoretical complexity at runtime.
+A comprehensive visualization engine that demonstrates **core DAA algorithms** across **5 paradigms**, solving real-world logistics and optimization problems with an **enhanced interactive GUI** that brings algorithms to life.
 
 ---
 
-## Algorithms Implemented
+## 🎯 Project Objective
 
-| # | Algorithm | Paradigm | Complexity | Module |
-|---|-----------|----------|------------|--------|
-| 1 | Dijkstra | Greedy | O(V²) | Route Planner |
-| 2 | Bellman-Ford | Dynamic Programming | O(V·E) | Route Planner |
-| 3 | Floyd-Warshall | Dynamic Programming | O(V³) | Route Planner |
-| 4 | BFS | Graph Traversal | O(V+E) | Route Planner |
-| 5 | DFS | Decrease & Conquer | O(V+E) | Route Planner |
-| 6 | Prim's MST | Greedy | O(V²) | Network Infra |
-| 7 | Kruskal's MST | Greedy | O(E log E) | Network Infra |
-| 8 | Topological Sort | Decrease & Conquer | O(V+E) | Network Infra |
-| 9 | 0/1 Knapsack | Dynamic Programming | O(n·W) | Cargo Optimizer |
-| 10 | Fractional Knapsack | Greedy | O(n log n) | Cargo Optimizer |
-| 11 | TSP Branch & Bound | Backtracking + B&B | O(n!) pruned | Delivery Route |
+**Main Agenda: Implement algorithms and show how they solve real-world problems.**
+
+This project goes beyond textbook implementations to demonstrate:
+- How algorithms are applied to practical scenarios (GPS, Network Design, Cargo Loading)
+- Why certain algorithms work better for specific problems
+- Trade-offs between different algorithmic approaches
+- Step-by-step visualization with storytelling explanations
 
 ---
 
-## Syllabus Coverage
+## 📊 Algorithms Implemented (Syllabus-Focused)
 
-| Syllabus Unit | Topics Covered |
-|---|---|
-| Unit 2 | BFS, DFS, Topological Sort |
-| Unit 3 | Dijkstra, Prim, Kruskal, 0/1 Knapsack DP, Floyd-Warshall, Fractional Knapsack |
-| Unit 4 | TSP Branch & Bound, Backtracking, NP-Hard concepts |
-| Self-Learning | Bellman-Ford, Union-Find DSU |
+### Graph Algorithms (Route Planning)
+| Algorithm | Paradigm | Complexity | Real-World Use |
+|-----------|----------|------------|----------------|
+| **Dijkstra** | Greedy | O(V²) | GPS Navigation, Shortest Routes |
+| Bellman-Ford | Dynamic Programming | O(V·E) | Currency Arbitrage Detection |
+| Floyd-Warshall | Dynamic Programming | O(V³) | Network Analysis |
+| BFS | Graph Traversal | O(V+E) | Social Networks, Web Crawling |
+| DFS | Graph Traversal | O(V+E) | Maze Solving, Cycle Detection |
+| Topological Sort | Decrease & Conquer | O(V+E) | Build Systems, Task Scheduling |
+
+### Minimum Spanning Tree (Network Design)
+| Algorithm | Paradigm | Complexity | Real-World Use |
+|-----------|----------|------------|----------------|
+| Prim's MST | Greedy | O(V²) | Network Infrastructure |
+| **Kruskal's MST** | Greedy | O(E log E) | Fiber Optic Network Design |
+
+### Optimization Problems
+| Algorithm | Paradigm | Complexity | Real-World Use |
+|-----------|----------|------------|----------------|
+| **0/1 Knapsack** | Dynamic Programming | O(n·W) | Cargo Loading, Resource Allocation |
+| Fractional Knapsack | Greedy | O(n log n) | Continuous Resource Allocation |
+| **TSP Branch & Bound** | Backtracking + B&B | O(n!) pruned | Delivery Route Optimization |
 
 ---
 
-## Project Structure
+## 🎓 Algorithm Paradigms Covered
+
+| Paradigm | Description | Algorithms |
+|----------|-------------|------------|
+| **Greedy** | Make locally optimal choice at each step | Dijkstra, Prim, Kruskal, Fractional Knapsack |
+| **Dynamic Programming** | Break into overlapping subproblems, memoize | 0/1 Knapsack, Floyd-Warshall, Bellman-Ford |
+| **Divide & Conquer** | Split, solve recursively, combine | Merge Sort, Quick Sort |
+| **Branch & Bound** | Systematic enumeration with pruning | TSP |
+| **Graph Traversal** | Systematic exploration of graph structure | BFS, DFS, Topological Sort |
+
+---
+
+## 🎨 Enhanced GUI Visualizer Features
+
+The GUI visualizer has been significantly enhanced with:
+
+### Visual Improvements
+- **Title bars** with algorithm name and progress indicators
+- **Glow effects** for current nodes/edges being processed
+- **Color-coded status** (unvisited, current, finalized, rejected)
+- **Progress bars** showing algorithm completion
+- **Paradigm badges** (GREEDY, DP, BRANCH&BOUND)
+- **Complexity indicators** (O(V²), O(E log E), etc.)
+
+### Storytelling & Education
+- **Real-world problem context** for each algorithm
+- **Step-by-step explanations** in story bar
+- **Visual comparison** between approaches (BF vs B&B, DP vs Greedy)
+- **Statistics panels** showing nodes explored, pruning efficiency
+
+### Algorithm Visualizations
+
+1. **Dijkstra's Shortest Path**
+   - GPS navigation scenario: Find cheapest routes from Bangalore
+   - Nodes show distance values, color indicates status
+   - Distance table with visual indicators
+   - Legend explaining node colors
+
+2. **Kruskal's MST**
+   - Network design scenario: Minimize fiber optic cable cost
+   - Edges sorted by weight, shown with ADD/CYCLE status
+   - MST statistics (edges added, total cost)
+   - Connected nodes highlighted in green
+
+3. **TSP Comparison**
+   - Delivery route scenario: Visit all cities and return
+   - Side-by-side Brute Force vs Branch & Bound
+   - Visual bar chart comparing nodes explored
+   - Pruning efficiency percentage
+
+4. **0/1 Knapsack**
+   - Cargo loading scenario: Maximize truck value
+   - Items shown as bars with weight/value/ratio
+   - Capacity gauge showing fill level
+   - DP optimal vs Greedy fractional comparison
+
+---
+
+## 📁 Project Structure
 
 ```
 RouteOptimizer/
+├── main.c                 # CLI with 7 focused menu options
+├── Makefile               # Build configuration
+├── include/
+│   ├── graph.h            # Graph data structures & shortest path algorithms
+│   ├── mst.h              # Minimum Spanning Tree algorithms
+│   ├── knapsack.h         # Knapsack problem variants
+│   ├── tsp.h              # Traveling Salesman Problem
+│   ├── algorithms.h       # Additional algorithm utilities
+│   ├── benchmark.h        # Timer & operation counter
+│   └── visualizer.h       # Raylib GUI visualizer
 ├── src/
-│   ├── graph.c       # Dijkstra, Bellman-Ford, Floyd-Warshall, BFS, DFS, Topo Sort
-│   ├── mst.c         # Prim's (O(V²)) + Kruskal's (O(E log E)) with Union-Find DSU
-│   ├── knapsack.c    # 0/1 DP + Greedy Fractional + cargo manifest
-│   ├── tsp.c         # Brute Force O(n!) + Branch & Bound with pruning counter
-│   └── benchmark.c   # Timer + operation counter used by all modules
-├── include/          # Header files for all modules
-├── data/             # Sample graph input
-├── main.c            # CLI shell + menu
-└── Makefile
+│   ├── graph.c            # Dijkstra, Bellman-Ford, Floyd-Warshall, BFS, DFS
+│   ├── mst.c              # Prim's, Kruskal's with Union-Find DSU
+│   ├── knapsack.c         # 0/1 DP + Greedy Fractional
+│   ├── tsp.c              # Brute Force + Branch & Bound
+│   ├── algorithms.c       # Sorting comparison, utilities
+│   ├── benchmark.c        # Performance measurement
+│   └── visualizer.c       # Enhanced interactive GUI demonstrations
+└── data/
+    └── sample_graph.txt   # Sample input data
 ```
 
 ---
 
-## Build & Run (Windows — MinGW)
+## 🚀 Build & Run
+
+### Windows (MinGW/TDM-GCC)
 
 ```bash
-C:\MinGW\bin\mingw32-make.exe          # build
-C:\MinGW\bin\mingw32-make.exe clean    # clean objects
-C:\MinGW\bin\mingw32-make.exe run      # build + run
+# Build with GUI visualizer (requires Raylib)
+mingw32-make
+
+# Build CLI-only version (no Raylib dependency)
+mingw32-make cli
+
+# Clean build artifacts
+mingw32-make clean
 ```
 
-**Compiler:** GCC (MinGW32)
-**Flags:** `-Wall -Wextra -O2` — zero warnings across all modules
+### Compiler Requirements
+- GCC with C99 support
+- Raylib library (for GUI visualizer)
+- Windows: TDM-GCC or MinGW-w64 recommended
 
 ---
 
-## Key Results
+## 📋 Menu Options
 
-### Route Planner (Module 1)
-All 3 algorithms produce **identical distances** from Bangalore:
-
-| Destination | Distance |
-|---|---|
-| Chennai | 346 km |
-| Hyderabad | 575 km |
-| Mumbai | 984 km |
-| Pune | 1133 km |
-| Delhi | 2143 km |
-
-Operation counts: Dijkstra **60** · Bellman-Ford **108** · Floyd-Warshall **216**
-Matches theoretical ratio V² : V·E : V³ exactly. ✓
-
-### MST (Module 2)
-Both Prim's and Kruskal's produce **identical MST cost: 3194 km**
-Op counts: Prim **72** · Kruskal **15** — Kruskal wins on sparse graphs. ✓
-
-### Cargo Optimizer (Module 3) — capacity 40 units
-
-| | 0/1 DP (Optimal) | Greedy Fractional |
-|---|---|---|
-| Total value | Rs 140k (integer-optimal) | Rs 150k (uses fractions) |
-| Feasible for real cargo? | Yes ✓ | No — splits items |
-
-Greedy appears better only because it splits items — impossible for real cargo boxes.
-DP is the only correct algorithm for 0/1 cargo loading. ✓
-
-### TSP Branch & Bound (Module 4)
-
-| Metric | Brute Force | Branch & Bound |
-|---|---|---|
-| Nodes explored | 26 | 9 |
-| Branches pruned | 0 | 2 |
-| Optimal tour | 5087 km | 5087 km ✓ |
-| Search space cut | — | **65.4%** |
-
-Same optimal answer. 65.4% of the search tree eliminated by lower-bound pruning.
+```
+╔══════════════════════════════════════════════════════════════╗
+║          SMART LOGISTICS & ROUTE OPTIMIZER v2.0              ║
+║     Design & Analysis of Algorithms - Mini Project           ║
+╠══════════════════════════════════════════════════════════════╣
+║  1. Shortest Path Comparison (Dijkstra/Bellman-Ford/Floyd)   ║
+║  2. MST Verification (Prim vs Kruskal)                       ║
+║  3. Knapsack Trade-off (0/1 DP vs Greedy)                    ║
+║  4. TSP Branch & Bound Pruning Demo                          ║
+║  5. Graph Traversal (BFS/DFS/Topological Sort)               ║
+║  6. Sorting Complexity Comparison                            ║
+║  7. Launch GUI Visualizer                                    ║
+║  0. Exit                                                     ║
+╚══════════════════════════════════════════════════════════════╝
+```
 
 ---
 
-## What This Demonstrates
+## 🎮 GUI Controls
 
-- **Algorithm design paradigms:** Greedy, DP, Backtracking, Divide & Conquer
-- **Complexity analysis:** Theoretical vs measured operation counts match at runtime
-- **Algorithm trade-offs:** When greedy works (fractional knapsack) vs when it fails (0/1)
-- **NP-Hard problems:** TSP with B&B pruning proof via live node counter
-- **Data structures:** Adjacency matrix, DSU with path compression + union-by-rank
-- **Graph theory:** Shortest paths, spanning trees, traversals, DAG ordering
+| Key | Action |
+|-----|--------|
+| **1-4** | Select algorithm from menu |
+| **ENTER** | Start visualization |
+| **SPACE** | Step through algorithm |
+| **A** | Toggle auto-advance mode |
+| **R** | Reset visualization |
+| **ESC** | Go back / Exit |
+
+---
+
+## 📚 Educational Value
+
+### What Students Learn
+
+1. **Algorithm Design Paradigms**
+   - When to use Greedy vs Dynamic Programming
+   - How Branch & Bound reduces exponential search
+   - Trade-offs between optimal and approximate solutions
+
+2. **Complexity Analysis**
+   - Visual proof of O(V²), O(E log E), O(n·W) complexity
+   - Operation counting during execution
+   - Comparison of algorithm efficiency
+
+3. **Real-World Applications**
+   - GPS navigation (Dijkstra)
+   - Network infrastructure (Kruskal)
+   - Cargo optimization (Knapsack)
+   - Delivery routing (TSP)
+
+4. **Data Structures**
+   - Priority queues (Dijkstra)
+   - Union-Find/DSU (Kruskal)
+   - DP tables (Knapsack)
+   - Recursion trees (TSP)
+
+---
+
+## 📖 Syllabus Coverage
+
+| Topic | Algorithms | Status |
+|-------|------------|--------|
+| Greedy Method | Dijkstra, Prim, Kruskal, Fractional Knapsack | ✅ |
+| Dynamic Programming | 0/1 Knapsack, Floyd-Warshall, Bellman-Ford | ✅ |
+| Branch & Bound | TSP | ✅ |
+| Graph Traversal | BFS, DFS, Topological Sort | ✅ |
+| Divide & Conquer | Merge Sort, Quick Sort | ✅ |
+
+---
+
+## 🏆 What Makes This Project Special
+
+1. **Visual Learning** - See algorithms execute step-by-step with explanations
+2. **Real-World Context** - Every algorithm solves a practical problem
+3. **Comparison Mode** - Understand trade-offs between approaches
+4. **Interactive** - Control the pace of visualization
+5. **Educational Stories** - Each step explains what's happening and why
+
+---
+
+## 👨‍💻 Author
+
+DAA Mini Project - Algorithm Visualization & Analysis

@@ -7,7 +7,7 @@ LDFLAGS = -L$(RAYLIB) -lraylib -lopengl32 -lgdi32 -lwinmm
 
 TARGET = route_optimizer.exe
 SRCS   = main.c src/graph.c src/mst.c src/knapsack.c \
-         src/tsp.c src/benchmark.c src/visualizer.c
+         src/tsp.c src/benchmark.c src/visualizer.c src/algorithms.c
 OBJS   = $(SRCS:.c=.o)
 
 all: $(TARGET)
@@ -23,3 +23,7 @@ clean:
 
 run: all
 	./$(TARGET)
+
+# Build without visualizer (no raylib dependency)
+cli: main.c src/graph.c src/mst.c src/knapsack.c src/tsp.c src/benchmark.c src/algorithms.c
+	$(CC) -Wall -Wextra -O2 -Iinclude -DNOVISUALIZER -o route_optimizer_cli.exe $^
